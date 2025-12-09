@@ -1,0 +1,386 @@
+/* 전체 배경: 파스텔 그라데이션 */
+:root{
+  --bg1: #f9f5ff; /* 연한 보라 */
+  --bg2: #fff9f1; /* 연한 크림 */
+  --accent: #a0d8ef; /* 연한 민트 */
+  --frame-bg: #ffffff; /* 결과 프레임 배경 (흰색) */
+  --muted: #8c8888;
+  --gold: linear-gradient(135deg, rgba(255,214,89,0.95), rgba(255,200,0,0.9));
+}
+
+* { box-sizing: border-box; }
+html,body,#root { 
+  margin: 0;
+  padding: 0;
+  height: 100dvh;
+  font-family: "Gowun Batang", "Inter", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(to bottom right, var(--bg1), var(--bg2));
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none; /* Chrome, Safari, Opera */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  user-select: none;         /* Standard syntax */
+}
+
+
+.fortune-root {
+  min-height: 100dvh;
+  /* max-width: 100vh; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(1200px 400px at 10% 10%, #fff7ff 0%, transparent 20%),
+              radial-gradient(900px 300px at 95% 95%, #f2fff9 0%, transparent 18%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+  transition: background 400ms ease;
+  padding: 7dvh 2.5dvh;
+}
+
+/* Header (title + subtitle) */
+.fortune-header { text-align: center; margin-bottom: 0px; }
+.title {
+  font-size: 2.7rem;
+  margin: 0;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #443e6b;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+}
+.subtitle {
+  margin: 8px 0 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* Main area: cookie centered */
+.fortune-main {
+  flex: 1 0 auto;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content: center;
+
+
+  /* 너비를 뷰포트 너비에 유동적으로 맞춥니다 (선택사항, 기존 주석처리된 width 사용 가능) */
+  max-width: 640px;
+  width: 100%; /* 화면 너비의 90%를 차지 */
+  margin-left: auto;
+  margin-right: auto; /* 중앙 정렬을 위해 추가 */
+
+  position: relative;
+}
+
+/* cookie wrap: 클릭 가능한 영역 */
+.cookie-wrap {
+  /* position: relative;
+  position: absolute;
+  top: 3%; */
+
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  margin-top: 1px;
+  margin-bottom: 3dvh;
+}
+
+/* cookie image */
+.cookie-img {
+  width: 100%;
+  max-width: 450px;
+  /* max-width: 50vh; */
+  margin: 0 0 0 0 auto;
+  height: auto;
+  display: block;
+  transition: transform 180ms ease, filter 300ms ease;
+  will-change: transform, filter;
+
+  /* 부드러운 그림자 */
+  /* box-shadow: 0 18px 32px rgba(70,60,90,0.08), 0 6px 12px rgba(70,60,90,0.06);
+  border-radius: 12px;
+  background: transparent; */
+}
+
+/* 클릭 시 진동(흔들림) 효과: CSS keyframes */
+@keyframes shakeX {
+  0% { transform: translateX(0) rotate(0deg); }
+  10% { transform: translateX(-6px) rotate(-3deg); }
+  30% { transform: translateX(6px) rotate(2deg); }
+  50% { transform: translateX(-4px) rotate(-2deg); }
+  70% { transform: translateX(3px) rotate(1deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* .shake 클래스가 적용될 때 애니메이션 180ms 동안 실행 */
+.cookie-img.shake {
+  animation: shakeX 180ms ease;
+}
+
+/* 부드러운 황금 웅웅거림 */
+@keyframes goldenPulse {
+  0% {
+    filter: drop-shadow(0 10px 25px rgba(255, 215, 100, 0.28))
+            brightness(1)
+            saturate(1.1);
+    opacity: 0.97;
+  }
+
+  50% {
+    filter: drop-shadow(0 14px 35px rgba(255, 225, 130, 0.2))
+            brightness(1.17)
+            saturate(1.25);
+    opacity: 1;
+  }
+
+  100% {
+    filter: drop-shadow(0 10px 25px rgba(255, 215, 100, 0.28))
+            brightness(1)
+            saturate(1.1);
+    opacity: 0.97;
+  }
+}
+
+.cookie-wrap.golden .cookie-img.golden-glow {
+  animation:
+    goldenPulse 1.7s ease-in-out infinite,
+    goldenRadiance 3.4s ease-in-out infinite;
+
+  filter: drop-shadow(0 10px 30px rgba(255,200,50,0.28))
+          brightness(1.03)
+          saturate(1.2);
+}
+
+.cookie-wrap.golden .cookie-img.golden-glow.shake {
+  animation:
+    shakeX 180ms ease,
+    goldenPulse 1.7s ease-in-out infinite,
+    goldenRadiance 3.4s ease-in-out infinite;
+}
+
+/* 새로운 Keyframes: 햇살이 퍼지는 느낌 */
+@keyframes goldenRadiance {
+  0% {
+    /* 그림자 크기와 투명도를 조절하여 빛이 퍼지는 느낌 연출 */
+    filter: drop-shadow(0 0 5px rgba(255, 220, 100, 0.5)) 
+            drop-shadow(0 0 15px rgba(255, 220, 100, 0.3)) 
+            brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(255, 230, 120, 0.7)) 
+            drop-shadow(0 0 30px rgba(255, 230, 120, 0.4)) 
+            brightness(1.1);
+  }
+  100% {
+    filter: drop-shadow(0 0 5px rgba(255, 220, 100, 0.5)) 
+            drop-shadow(0 0 15px rgba(255, 220, 100, 0.3)) 
+            brightness(1);
+  }
+}
+
+
+/* effect 이미지(오버레이) */
+.effect-img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 60%;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.08));
+  transform-origin: center;
+  animation: effectPop 420ms ease forwards;
+}
+@keyframes effectPop {
+  from { transform: scale(0.85) translateY(10px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 결과 프레임 (하얀 프레임) */
+.result-frame {
+  /* margin-top: 20dvh; */
+  /* height나 min-height를 고정하여 내부 텍스트 변화에 대응 */
+  margin-top: 0;
+  min-height: 25dvh;
+  /* width: min(66vw, 640px); */
+  /* max-width: 94%; */
+  background: var(--frame-bg);
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 3px solid rgba(33, 33, 20, 0.12);
+  box-shadow: 0 12px 26px rgba(60,50,80,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-align: center;
+
+  /*서서히 나타남*/
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-out, visibility 0.15s ease-out;
+}
+
+.result-frame.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.result-frame.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0s;
+}
+
+/* 황금운세일 때 프레임에도 금빛 강조 */
+.result-frame.result-golden {
+  background: linear-gradient(180deg, rgba(255,250,230,0.98), #fff);
+  border: 1px solid rgba(255,210,80,0.12);
+  box-shadow: 0 18px 36px rgba(255,200,60,0.08);
+}
+
+/* fortune text */
+.fortune-text { 
+    font-size: 1.3rem; 
+    color: #2b2535; 
+    line-height: 1.5; 
+    padding: 2px 4px; 
+    
+    /* 굵기를 추가합니다*/
+    font-weight: 700; 
+
+    /* 만약 다른 폰트를 사용하고 싶다면 여기에 font-family를 재정의할 수 있습니다 */
+    /* font-family: "Gothic A1", sans-serif; */
+}
+.fortune-text p { 
+    margin: 0;
+ }
+
+/* golden badge */
+.golden-badge {
+  display:inline-block;
+  font-weight:700;
+  margin-bottom:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(255,215,80,0.95), rgba(255,225,120,0.95));
+  color: #3a2b00;
+  box-shadow: 0 4px 14px rgba(255,190,40,0.14);
+  font-size: 0.9rem;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.golden-badge.is-hidden {
+    visibility: hidden; 
+    opacity: 0;
+}
+
+.golden-badge.is-visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* retry button */
+.retry-btn {
+  font-size: 0.9rem;
+  margin-top: 6px;
+  /* padding: 10px 18px; */
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #f7f7f9);
+  border: 2px solid rgba(33, 33, 39, 0.06);
+  box-shadow: 0 8px 18px rgba(60,50,80,0.04);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  outline: none;
+}
+.retry-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(60,50,80,0.08);
+}
+.retry-btn:active {
+  transform: translateY(0px) scale(0.995);
+  box-shadow: 0 6px 12px rgba(60,50,80,0.06);
+}
+
+/* Footer */
+.fortune-footer { 
+  margin-top: 18px; text-align:center; color:var(--muted); font-size:0.85rem;
+  position: bottom;
+}
+
+/* Accessibility & focus */
+.cookie-wrap:focus { outline: none; }
+.cookie-wrap:focus-visible { box-shadow: 0 0 0 6px rgba(160,216,239,0.24); border-radius: 14px; }
+
+/* Responsive tweaks */
+@media (max-width: 520px) {
+  .title { font-size: 1.6rem; }
+  .cookie-img { width: min(72vw, 320px); }
+  .result-frame { padding: 14px; border-radius: 12px; }
+}
+
+/* small visual polish */
+.title::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 3px;
+  margin: 10px auto 0;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(170,150,255,0.7), rgba(160,216,239,0.7));
+  opacity: 0.9;
+}
+
+/* ==========================================
+    가로모드 태블릿 최적화 (높이 제한 대응)
+   ========================================== */
+@media screen and (orientation: landscape) and (max-height: 900px) {
+  
+  /* 전체 상하 여백 줄여서 높이 절약 */
+  .fortune-root {
+    padding-top: 7dvh;
+    padding-bottom: 1dvh;
+    padding-left: 1dvh;
+    padding-right: 1dvh;
+  }
+
+  /* 헤더 여백 압축 */
+  /* .fortune-header {
+    margin-bottom: 1vh;
+  } */
+  .title {
+    font-size: 2.2rem;
+  }
+
+  /* cookie 이미지: 세로공간에 맞추도록 자동 축소 */
+  .cookie-img {
+    max-width: 50dvh;   /* 세로 기준 크기 제어 */
+    width: auto;       /* 비율 유지 */
+  }
+
+  /* 결과 프레임도 세로 높이에 맞게 제한 */
+  .result-frame {
+    /* margin-top: 35vh; */
+    max-height: 50dvh;
+    min-height: 15dvh;      /* 결과 텍스트 박스 높이 자동 축소 */
+    overflow-y: auto;        /* 내부 스크롤 허용 */
+    width: 100%;
+    /* padding: 10vh; */
+  }
+
+  /* 폰트도 소폭 줄여서 영역 최적화 */
+  /* .retry-btn {
+    margin:0,0,0,60px;
+  } */
+}
